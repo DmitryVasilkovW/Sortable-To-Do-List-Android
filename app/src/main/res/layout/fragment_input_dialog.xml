@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -6,24 +5,35 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/input"
+        android:id="@+id/taskNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Введите текст"
+        android:hint="Имя задачи"
         android:inputType="text" />
 
-    <Button
-        android:id="@+id/ok_button"
+    <EditText
+        android:id="@+id/taskTextEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OK" />
+        android:hint="Текст задачи"
+        android:inputType="text" />
+
+    <CheckBox
+        android:id="@+id/isCompletedCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Задача выполнена" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Добавить задачу" />
 
     <Button
         android:id="@+id/cancel_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Отмена" />
-
-    <!-- Добавьте здесь другие кнопки, если они вам нужны -->
 
 </LinearLayout>
