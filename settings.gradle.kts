@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Sortable To Do List for Android"
 include(":app")
+include(":interactors")
+include(":presentation")
+include(":data")
+include(":domain")

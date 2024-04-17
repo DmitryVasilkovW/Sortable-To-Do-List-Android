@@ -7,7 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_tasks"
-        android:name="com.sortabletodolist.sortabletodolistforandroid.ui.tasks.TasksFragment"
+        android:name="com.sortabletodolist.sortabletodolistforandroid.ui.tasks.TaskFragment"
         android:label="@string/title_tasks"
         tools:layout="@layout/fragment_tasks" />
+
+    <fragment
+        android:id="@+id/dialog_button"
+        android:name="com.sortabletodolist.sortabletodolistforandroid.ui.dialog.DialogFragment"
+        android:label="@string/title_tasks"
+        tools:layout="@layout/fragment_input_dialog" />
 </navigation>
