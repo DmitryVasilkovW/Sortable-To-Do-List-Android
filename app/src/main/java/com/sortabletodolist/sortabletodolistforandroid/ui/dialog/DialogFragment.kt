@@ -11,27 +11,27 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.sortabletodolist.data.repository.TaskRepository
-import com.sortabletodolist.domain.models.Task
-import com.sortabletodolist.interactors.TaskInteractor
+import com.sortabletodolist.presentation.scenarios.TaskScenario
 import com.sortabletodolist.sortabletodolistforandroid.R
-import com.sortabletodolist.sortabletodolistforandroid.ui.adapters.TaskAdapter
 import com.sortabletodolist.sortabletodolistforandroid.ui.models.SharedViewModel
 import kotlinx.coroutines.launch
 
-class DialogFragment : BottomSheetDialogFragment() {
+class DialogFragment : BottomSheetDialogFragment()
+{
     private lateinit var taskNameEditText: EditText
     private lateinit var taskTextEditText: EditText
     private lateinit var isCompletedCheckBox: CheckBox
     private lateinit var addButton: Button
     private lateinit var cancelButton: Button
     private lateinit var sharedViewModel: SharedViewModel
+    private val taskScenario: TaskScenario = TaskScenario()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         val view = inflater.inflate(R.layout.fragment_input_dialog, container, false)
 
         taskNameEditText = view.findViewById(R.id.taskNameEditText)
@@ -40,7 +40,6 @@ class DialogFragment : BottomSheetDialogFragment() {
         addButton = view.findViewById(R.id.addButton)
         cancelButton = view.findViewById(R.id.cancel_button)
 
-        // Получите ссылку на общую ViewModel
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         addButton.setOnClickListener {
@@ -48,13 +47,8 @@ class DialogFragment : BottomSheetDialogFragment() {
             val taskText = taskTextEditText.text.toString()
             val isCompleted = isCompletedCheckBox.isChecked
 
-            val task = Task(null, taskName, taskText, isCompleted)
-
-            // Запуск сопрограммы для добавления задачи
             lifecycleScope.launch {
-                val taskRepository = TaskRepository(requireContext())
-                val taskInteractor = TaskInteractor(taskRepository)
-                taskInteractor.addTask(task)
+                taskScenario.addTask(null, taskName, taskText, isCompleted, requireContext())
                 updateTaskList()
             }
 
@@ -68,12 +62,10 @@ class DialogFragment : BottomSheetDialogFragment() {
         return view
     }
 
-    private suspend fun updateTaskList() {
-        val taskRepository = TaskRepository(requireContext())
-        val taskInteractor = TaskInteractor(taskRepository)
-        val tasks = taskInteractor.getAllTasks()
+    private suspend fun updateTaskList()
+    {
+        val tasks = taskScenario.getAllTasks(requireContext())
 
-        // Обновите общую ViewModel
         sharedViewModel.updateTasks(tasks)
     }
 }
