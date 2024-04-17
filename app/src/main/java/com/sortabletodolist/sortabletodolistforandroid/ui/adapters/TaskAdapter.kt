@@ -32,7 +32,9 @@ class TaskAdapter(private val tasks: List<Task>) : BaseAdapter()
         if (convertView == null)
         {
             view = LayoutInflater.from(parent.context).inflate(R.layout.task_item, parent, false)
-        } else {
+        }
+        else
+        {
             view = convertView
         }
 
