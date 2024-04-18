@@ -5,21 +5,28 @@ import com.sortabletodolist.data.repository.TaskRepository
 import com.sortabletodolist.domain.models.Task
 import com.sortabletodolist.interactors.TaskInteractor
 
-class TaskScenario
+class TaskScenario(private val context: Context)
 {
-    suspend fun addTask(id: Int?, taskName: String, taskText: String, isCompleted: Boolean, context: Context)
-    {
-        val taskRepository = TaskRepository(context)
-        val taskInteractor = TaskInteractor(taskRepository)
+    private val taskRepository = TaskRepository(context)
+    private val taskInteractor = TaskInteractor(taskRepository)
 
+    suspend fun addTask(id: Int?, taskName: String, taskText: String, isCompleted: Boolean)
+    {
         taskInteractor.addTask(Task(id, taskName, taskText, isCompleted))
     }
 
-    suspend fun getAllTasks(context: Context): List<Task>
+    suspend fun getAllTasks(): List<Task>
     {
-        val taskRepository = TaskRepository(context)
-        val taskInteractor = TaskInteractor(taskRepository)
-
         return taskInteractor.getAllTasks()
+    }
+
+    suspend fun deleteTask(task: Task)
+    {
+        taskInteractor.deleteTask(task)
+    }
+
+    suspend fun saveTask(task: Task)
+    {
+        taskInteractor.saveTask(task)
     }
 }

@@ -5,22 +5,28 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/taskNameTextView"
+    <EditText
+        android:id="@+id/taskNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        android:hint="Название задачи" />
 
-    <TextView
-        android:id="@+id/taskTextTextView"
+    <EditText
+        android:id="@+id/taskTextEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:hint="Текст задачи" />
 
-    <TextView
-        android:id="@+id/taskStatusTextView"
+    <Button
+        android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:text="Сохранить изменения" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Удалить задачу" />
 
 </LinearLayout>

@@ -18,9 +18,10 @@ class TaskRepository(context: Context) : ITaskRepository
 
     private val taskMapper = TaskMapper()
 
-    suspend override fun saveTask(task: Task)
+    suspend override fun addTask(task: Task)
     {
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO)
+        {
             db.taskDao().insert(taskMapper.fromTaskToTaskDataObject(task))
         }
     }
@@ -32,6 +33,26 @@ class TaskRepository(context: Context) : ITaskRepository
             db.taskDao().getAll().map { taskDataObject ->
                 taskMapper.fromTaskDataObjectToTask(taskDataObject)
             }
+        }
+    }
+
+    suspend override fun deleteTask(task: Task)
+    {
+        withContext(Dispatchers.IO)
+        {
+            db.taskDao().delete(task.id.toString())
+        }
+    }
+
+    suspend override fun saveTask(task: Task)
+    {
+        if (task.id != null && db.taskDao().get(task.id.toString()) != null)
+        {
+            db.taskDao().update(taskMapper.fromTaskToTaskDataObject(task))
+        }
+        else
+        {
+            db.taskDao().insert(taskMapper.fromTaskToTaskDataObject(task))
         }
     }
 }

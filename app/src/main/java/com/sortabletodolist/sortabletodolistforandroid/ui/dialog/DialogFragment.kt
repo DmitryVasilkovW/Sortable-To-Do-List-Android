@@ -1,5 +1,6 @@
 package com.sortabletodolist.sortabletodolistforandroid.ui.dialog
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,13 @@ class DialogFragment : BottomSheetDialogFragment()
     private lateinit var addButton: Button
     private lateinit var cancelButton: Button
     private lateinit var sharedViewModel: SharedViewModel
-    private val taskScenario: TaskScenario = TaskScenario()
+    private lateinit var taskScenario: TaskScenario
+
+    override fun onAttach(context: Context)
+    {
+        super.onAttach(context)
+        taskScenario = TaskScenario(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +55,7 @@ class DialogFragment : BottomSheetDialogFragment()
             val isCompleted = isCompletedCheckBox.isChecked
 
             lifecycleScope.launch {
-                taskScenario.addTask(null, taskName, taskText, isCompleted, requireContext())
+                taskScenario.addTask(null, taskName, taskText, isCompleted)
                 updateTaskList()
             }
 
@@ -64,7 +71,7 @@ class DialogFragment : BottomSheetDialogFragment()
 
     private suspend fun updateTaskList()
     {
-        val tasks = taskScenario.getAllTasks(requireContext())
+        val tasks = taskScenario.getAllTasks()
 
         sharedViewModel.updateTasks(tasks)
     }
