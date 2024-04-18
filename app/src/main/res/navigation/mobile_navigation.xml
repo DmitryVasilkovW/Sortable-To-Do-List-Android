@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_tasks" />
 
     <fragment
+        android:id="@+id/edit_dialog_fragment"
+        android:name="com.sortabletodolist.sortabletodolistforandroid.ui.dialog.EditTaskDialogFragment"
+        android:label="@string/title_tasks"
+        tools:layout="@layout/dialog_edit_task" />
+
+    <fragment
         android:id="@+id/dialog_button"
         android:name="com.sortabletodolist.sortabletodolistforandroid.ui.dialog.DialogFragment"
         android:label="@string/title_tasks"

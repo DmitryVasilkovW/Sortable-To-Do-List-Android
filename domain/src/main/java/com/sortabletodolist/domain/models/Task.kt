@@ -1,6 +1,8 @@
 package com.sortabletodolist.domain.models
 
-class Task(id: Int?, name: String, text: String, isCompleted: Boolean)
+import java.io.Serializable
+
+class Task(id: Int?, name: String, text: String, isCompleted: Boolean) : Serializable
 {
     var id: Int? = id
         private set
