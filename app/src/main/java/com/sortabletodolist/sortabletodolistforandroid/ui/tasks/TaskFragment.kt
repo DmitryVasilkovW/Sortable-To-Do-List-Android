@@ -61,14 +61,18 @@ class TaskFragment : Fragment()
 
         sharedViewModel.tasks.observe(viewLifecycleOwner)
         { tasks ->
-            val taskAdapter = TaskAdapter(tasks, { updatedTask ->
-                lifecycleScope.launch(Dispatchers.IO) {
+            val taskAdapter = TaskAdapter(
+                tasks
+            ) { updatedTask ->
+                lifecycleScope.launch(Dispatchers.IO)
+                {
                     taskScenario.saveTask(updatedTask)
-                    launch(Dispatchers.Main) {
+                    launch(Dispatchers.Main)
+                    {
                         sharedViewModel.updateTask(updatedTask, taskScenario)
                     }
                 }
-            }, taskScenario)
+            }
 
             taskListView.adapter = taskAdapter
 
@@ -104,9 +108,9 @@ class TaskFragment : Fragment()
             }
         }
 
-
         fabAddTask = view.findViewById(R.id.fab_add_task)
         fabAddTask.setOnClickListener {
+
             val inputDialogFragment = DialogFragment()
 
             inputDialogFragment.show(childFragmentManager, inputDialogFragment::class.java.simpleName)

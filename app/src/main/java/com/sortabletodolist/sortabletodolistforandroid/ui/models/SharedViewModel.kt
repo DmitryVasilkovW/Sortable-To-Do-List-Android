@@ -19,9 +19,11 @@ class SharedViewModel : ViewModel()
 
     fun updateTask(updatedTask: Task, scenario: TaskScenario)
     {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO)
+        {
             scenario.saveTask(updatedTask)
-            launch(Dispatchers.Main) {
+            launch(Dispatchers.Main)
+            {
                 updateTasks(scenario.getAllTasks())
             }
         }
@@ -29,12 +31,13 @@ class SharedViewModel : ViewModel()
 
     fun deleteTask(task: Task, scenario: TaskScenario)
     {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO)
+        {
             scenario.deleteTask(task)
-            launch(Dispatchers.Main) {
+            launch(Dispatchers.Main)
+            {
                 updateTasks(scenario.getAllTasks())
             }
         }
     }
-
 }
