@@ -2,8 +2,11 @@ package com.sortabletodolist.sortabletodolistforandroid.ui.models
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sortabletodolist.domain.models.Task
 import com.sortabletodolist.presentation.scenarios.TaskScenario
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SharedViewModel : ViewModel()
 {
@@ -14,15 +17,24 @@ class SharedViewModel : ViewModel()
         tasks.postValue(newTasks)
     }
 
-    suspend fun updateTask(updatedTask: Task, scenario: TaskScenario)
+    fun updateTask(updatedTask: Task, scenario: TaskScenario)
     {
-        scenario.saveTask(updatedTask)
-        updateTasks(scenario.getAllTasks())
+        viewModelScope.launch(Dispatchers.IO) {
+            scenario.saveTask(updatedTask)
+            launch(Dispatchers.Main) {
+                updateTasks(scenario.getAllTasks())
+            }
+        }
     }
 
-    suspend fun deleteTask(task: Task, scenario: TaskScenario)
+    fun deleteTask(task: Task, scenario: TaskScenario)
     {
-        scenario.deleteTask(task)
-        updateTasks(scenario.getAllTasks())
+        viewModelScope.launch(Dispatchers.IO) {
+            scenario.deleteTask(task)
+            launch(Dispatchers.Main) {
+                updateTasks(scenario.getAllTasks())
+            }
+        }
     }
+
 }

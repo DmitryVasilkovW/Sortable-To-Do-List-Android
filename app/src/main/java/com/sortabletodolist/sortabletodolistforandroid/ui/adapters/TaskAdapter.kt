@@ -7,35 +7,36 @@ import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 import com.sortabletodolist.domain.models.Task
+import com.sortabletodolist.presentation.scenarios.TaskScenario
 import com.sortabletodolist.sortabletodolistforandroid.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class TaskAdapter(private val tasks: List<Task>) : BaseAdapter()
-{
+class TaskAdapter(
+    private val tasks: List<Task>,
+    private val onTaskUpdated: (Task) -> Unit,
+    private val taskScenario: TaskScenario
+) : BaseAdapter() {
 
-    override fun getCount(): Int
-    {
+    override fun getCount(): Int {
         return tasks.size
     }
 
-    override fun getItem(position: Int): Any
-    {
+    override fun getItem(position: Int): Any {
         return tasks[position]
     }
 
-    override fun getItemId(position: Int): Long
-    {
+    override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View
-    {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
-        if (convertView == null)
-        {
+
+        if (convertView == null) {
             view = LayoutInflater.from(parent.context).inflate(R.layout.task_item, parent, false)
-        }
-        else
-        {
+        } else {
             view = convertView
         }
 
@@ -47,10 +48,23 @@ class TaskAdapter(private val tasks: List<Task>) : BaseAdapter()
         taskNameTextView.text = task.name
         taskTextTextView.text = task.text
         taskCompleateStatusView.isChecked = task.isCompleted
-        taskCompleateStatusView.isClickable = false
-        taskCompleateStatusView.isFocusable = false
+
+        taskCompleateStatusView.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed) {
+                val updatedTask = Task(
+                    id = task.id,
+                    name = task.name,
+                    text = task.text,
+                    isCompleted = isChecked
+                )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    taskScenario.saveTask(updatedTask)
+                    onTaskUpdated(updatedTask)
+                }
+            }
+        }
 
         return view
     }
-
 }
