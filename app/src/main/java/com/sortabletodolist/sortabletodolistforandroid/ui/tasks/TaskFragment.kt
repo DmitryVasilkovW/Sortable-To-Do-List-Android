@@ -18,6 +18,7 @@ import com.sortabletodolist.sortabletodolistforandroid.ui.adapters.TaskAdapter
 import com.sortabletodolist.sortabletodolistforandroid.ui.dialog.DialogFragment
 import com.sortabletodolist.sortabletodolistforandroid.ui.dialog.EditTaskDialogFragment
 import com.sortabletodolist.sortabletodolistforandroid.ui.models.SharedViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TaskFragment : Fragment()
@@ -60,26 +61,37 @@ class TaskFragment : Fragment()
 
         sharedViewModel.tasks.observe(viewLifecycleOwner)
         { tasks ->
-            val taskAdapter = TaskAdapter(tasks)
+            val taskAdapter = TaskAdapter(
+                tasks
+            ) { updatedTask ->
+                lifecycleScope.launch(Dispatchers.IO)
+                {
+                    taskScenario.saveTask(updatedTask)
+                    launch(Dispatchers.Main)
+                    {
+                        sharedViewModel.updateTask(updatedTask, taskScenario)
+                    }
+                }
+            }
 
             taskListView.adapter = taskAdapter
 
             taskCountTextView.text = when
             {
                 tasks.isEmpty() ->
-                    {
+                {
                     "У вас нет задач"
                 }
                 tasks.size % 10 == 1 && tasks.size % 100 != 11 ->
-                    {
+                {
                     "У вас ${tasks.size} задача"
                 }
                 tasks.size % 10 in 2..4 && tasks.size % 100 !in 12..14 ->
-                    {
+                {
                     "У вас ${tasks.size} задачи"
                 }
                 else ->
-                    {
+                {
                     "У вас ${tasks.size} задач"
                 }
             }
@@ -87,14 +99,18 @@ class TaskFragment : Fragment()
 
 
         taskListView.setOnItemClickListener { parent, view, position, id ->
-            val selectedTask = parent.getItemAtPosition(position) as Task
-            val editDialogFragment = EditTaskDialogFragment.newInstance(selectedTask)
+            if (view.id != R.id.taskStatusCheckBox)
+            {
+                val selectedTask = parent.getItemAtPosition(position) as Task
+                val editDialogFragment = EditTaskDialogFragment.newInstance(selectedTask)
 
-            editDialogFragment.show(childFragmentManager, "EditTaskDialogFragment")
+                editDialogFragment.show(childFragmentManager, "EditTaskDialogFragment")
+            }
         }
 
         fabAddTask = view.findViewById(R.id.fab_add_task)
         fabAddTask.setOnClickListener {
+
             val inputDialogFragment = DialogFragment()
 
             inputDialogFragment.show(childFragmentManager, inputDialogFragment::class.java.simpleName)

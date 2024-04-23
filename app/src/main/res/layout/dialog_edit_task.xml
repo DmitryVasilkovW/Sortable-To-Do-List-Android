@@ -17,6 +17,12 @@
         android:layout_height="wrap_content"
         android:hint="Текст задачи" />
 
+    <CheckBox
+        android:id="@+id/taskStatusCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp" />
+
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
